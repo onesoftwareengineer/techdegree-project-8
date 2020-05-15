@@ -3,7 +3,6 @@ var router = express.Router();
 const { Book } = require('../models/index');
 
 //asyncHandler used to avoid adding try catch for each promise while calling database
-//code taken from https://teamtreehouse.com/library/refactor-with-express-middleware
 function asyncHandler(cb){
   return async (req, res, next)=>{
     try {
@@ -30,15 +29,53 @@ router.get('/new', (req,res) => {
 });
 
 /* post /books/new - Posts a new book to the database. */
+router.post('/new', asyncHandler( async(req,res) => {
+    let book;
+    try {
+      book = await Book.create(req.body);
+      res.redirect('/books/');
+    } catch (error) {
+      //handle sequelize validation error
+      if(error.name === 'SequelizeValidationError') {
+        book = await Book.build(req.body);
+        res.render('new-book', { book , errors: error.errors, title: "New Book" });
+      } else {
+        throw error;
+      }
+    } 
+  }
+));
 
 /* get /books/:id - Shows book detail form. */
+router.get('/:id', asyncHandler( async(req,res,next) => {
+    const book = await Book.findByPk(req.params.id);
+    res.render('update-book', {book:book, title:"Update Book"});
+  }
+));
 
 /* post /books/:id - Updates book info in the database. */
+router.post('/:id', asyncHandler( async (req,res) => {
+  let book = await Book.findByPk(req.params.id);
+  try {
+    await book.update(req.body)
+    res.redirect('/books');      
+  } catch (error) {
+    //handle sequelize validation errors
+    if(error.name === 'SequelizeValidationError') {
+      book = req.body;
+      book.id = req.params.id;
+      res.render('update-book', {book, errors: error.errors, title:"Update Book"});
+    } else {
+      throw(error);
+    }
+  }
+}));
 
-/* post /books/:id/delete - Deletes a book. Careful, this can’t be undone. It can be helpful to create a new “test” book to test deleting. */
-
-/* Set up a custom error handler middleware function that logs the error to the console and renders an “Error” view with a friendly message for the user. This is useful if the server encounters an error, like trying to view the “Books Detail” page for a book :id that doesn’t exist. See the error.html file in the example-markup folder to see what this would look like. */
-
-/* Set up a middleware function that returns a 404 NOT FOUND HTTP status code and renders a "Page Not Found" view when the user navigates to a non-existent route, such as /error. See the page_found.html file in the example markup folder for an example of what this would look like. */
+/* post /books/:id/delete - Deletes a book. Careful, this can’t be undone ;) */
+router.post('/:id/delete', asyncHandler( async (req, res) => {
+  const book = await Book.findByPk(req.params.id);
+  book.destroy();
+  res.redirect('/books');
+}));
 
 module.exports = router;

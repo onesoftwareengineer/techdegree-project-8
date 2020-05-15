@@ -4,3 +4,4 @@
 # Important notes:
 // npx sequelize init was used to initialize database setup
 // express-generator was used to initialize project setup
+// asyncHandler function code taken from https://teamtreehouse.com/library/refactor-with-express-middleware

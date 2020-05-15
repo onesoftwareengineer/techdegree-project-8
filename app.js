@@ -22,20 +22,22 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/books', booksRouter);
 
-// catch 404 and forward to error handler
-app.use(function(req, res, next) {
-  next(createError(404));
+// middleware to catch 404 and render 404 page
+app.use( (req,res) => {
+  res.status(404);
+  res.render('page-not-found', { title: "Page Not Found" } );
 });
 
-// error handler
+// error handler to catch errors and render error page (404 excluded)
 app.use(function(err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
 
-  // render the error page
+  //console log details about the error
   res.status(err.status || 500);
-  res.render('error');
+  console.log(res.locals.message);
+  res.render('error', { title: 'Server Error' });
 });
 
 module.exports = app;
