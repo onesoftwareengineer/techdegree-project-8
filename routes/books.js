@@ -17,20 +17,23 @@ function asyncHandler(cb){
 
 /* get /books - Shows the full list of books */
 router.get('/', asyncHandler( async (req,res) => {
+  //get number of pages
+  const numberOfPages = Math.ceil((await Book.findAll()).length / 10);
+
   //req.query.page is parameter used for pagination
   //if there is no page parameter then initialize it with 1
   let currentPageNumber = req.query.page;
   if(currentPageNumber === undefined) {
-    currentPageNumber = 0;
+    currentPageNumber = 1;
+  } else if(currentPageNumber > numberOfPages || currentPageNumber < 1 ) {
+    //throw error if user edited page number query with a page number higher than number of pages
+    throw(error);
   }
-  
-  //get number of pages
-  const numberOfPages = Math.ceil((await Book.findAll()).length / 10);
 
   //get books for required page
   const allBooks = await Book.findAll({
-    offset: currentPageNumber*10,
-    limit: (currentPageNumber+1)*10,
+    offset: (currentPageNumber-1)*10,
+    limit: currentPageNumber*10,
   });
   res.render('index', { allBooks, numberOfPages });
 }));
