@@ -1,6 +1,8 @@
 var express = require('express');
 var router = express.Router();
-const { Book } = require('../models/index');
+const { Book, Sequelize } = require('../models/index');
+//initialize to use Sequelize operators
+const Op = Sequelize.Op;
 
 //asyncHandler used to avoid adding try catch for each promise while calling database
 function asyncHandler(cb){
@@ -15,13 +17,48 @@ function asyncHandler(cb){
 
 /* get /books - Shows the full list of books */
 router.get('/', asyncHandler( async (req,res) => {
-    const allBooks = await Book.findAll({
-      //books will be displayed in ascending order by title, books starting with a first and so on
-      order: [['title','ASC']],
-    });
-    res.render('index', { allBooks });
+  //req.query.page is parameter used for pagination
+  //if there is no page parameter then initialize it with 1
+  let currentPageNumber = req.query.page;
+  if(currentPageNumber === undefined) {
+    currentPageNumber = 0;
   }
-));
+  
+  //get number of pages
+  const numberOfPages = Math.ceil((await Book.findAll()).length / 10);
+
+  //get books for required page
+  const allBooks = await Book.findAll({
+    offset: currentPageNumber*10,
+    limit: (currentPageNumber+1)*10,
+  });
+  res.render('index', { allBooks, numberOfPages });
+}));
+
+/* post /books - searches for title, author, genre and year */
+router.post('/', asyncHandler( async(req,res) => {
+  const allBooks = await Book.findAll({
+    where: {
+      [Op.or]: [
+        {title: {
+          [Op.like]: `%${req.body.search}%`
+        }},
+        {author: {
+            [Op.like]: `%${req.body.search}%`
+        }},
+        {year: {
+            [Op.like]: `%${req.body.search}%`
+        }},
+        {genre: {
+            [Op.like]: `%${req.body.search}%`
+        }}
+      ]
+    },
+    //books will be displayed in ascending order by title, books starting with letter A first and so on ...
+    order: [['title','ASC']],
+  });
+  res.render('index', {allBooks, query: req.body.search, numberOfPages: 0});
+}));
 
 /* get /books/new - Shows the create new book form. */
 router.get('/new', (req,res) => {

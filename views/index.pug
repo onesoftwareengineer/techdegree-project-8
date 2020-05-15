@@ -3,7 +3,14 @@ extends layout
 block content
   h1 Books
   p
-    a(href="/books/new", class="button") Create New Book
+    a(href="/books/new", class="button") Create New Book   
+  p
+    a(href="/books", class="button") Show All Books
+  br
+  form(action="/books", method="post")
+    input(type="submit", value="Search Book")
+    input(name="search", type="text", id="search", value=query)
+  br
   table
     thead
       tr
@@ -19,3 +26,10 @@ block content
           td=book.author
           td=book.genre
           td=book.year
+  p
+    - if(numberOfPages)
+      span Pages
+      |  
+      - for(let x=0; x < numberOfPages ; x++)
+        a(href=`/books?page=${x}`)=`${x+1}`
+        |  
