@@ -1,4 +1,7 @@
 # Book library web application using SQLite and Node
+Book library web application written in Javascript / Node / Express that uses SQLite. 
+User can search for any books by title, author, genre or year and add/delete/edit books.
+It also has pagination in case of a larger database.
 
 ## Technologies
 Javascript, Node, Express, SQLite, SQL Sequelize ORM
