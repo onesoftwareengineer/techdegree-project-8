@@ -9,13 +9,13 @@ Javascript, Node, Express, SQLite, SQL Sequelize ORM
 // asyncHandler() taken from https://teamtreehouse.com/library/refactor-with-express-middleware
 
 ## Screenshots
-![image](https://github.com/onesoftwareengineer/techdegree-project-8/blob/master/screenshots-allbooks.JPG)
 *all books*
+![image](https://github.com/onesoftwareengineer/techdegree-project-8/blob/master/screenshots-allbooks.JPG)
 
 
-![image](https://github.com/onesoftwareengineer/techdegree-project-8/blob/master/screenshots-bookdetail.JPG)
 *book detail*
+![image](https://github.com/onesoftwareengineer/techdegree-project-8/blob/master/screenshots-bookdetail.JPG)
 
 
-![image](https://github.com/onesoftwareengineer/techdegree-project-8/blob/master/screenshots-searchresults.JPG)
 *search results*
+![image](https://github.com/onesoftwareengineer/techdegree-project-8/blob/master/screenshots-searchresults.JPG)
