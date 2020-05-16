@@ -1,7 +1,21 @@
-# techdegree-project-8
- Book library web application using SQLite
+# Book library web application using SQLite and Node
 
-# Important notes:
+## Technologies
+Javascript, Node, Express, SQLite, SQL Sequelize ORM
+
+## Important notes
 // npx sequelize init was used to initialize database setup
 // express-generator was used to initialize project setup
-// asyncHandler function code taken from https://teamtreehouse.com/library/refactor-with-express-middleware
+// asyncHandler() taken from https://teamtreehouse.com/library/refactor-with-express-middleware
+
+## Screenshots
+![image](https://github.com/onesoftwareengineer/techdegree-project-8/blob/master/screenshots-allbooks.JPG)
+*all books*
+
+
+![image](https://github.com/onesoftwareengineer/techdegree-project-8/blob/master/screenshots-bookdetail.JPG)
+*book detail*
+
+
+![image](https://github.com/onesoftwareengineer/techdegree-project-8/blob/master/screenshots-searchresults.JPG)
+*search results*
